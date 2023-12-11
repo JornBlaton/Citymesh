@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Meeting extends Model
 {
+    public $table = 'bookings';
     use HasFactory;
 }
