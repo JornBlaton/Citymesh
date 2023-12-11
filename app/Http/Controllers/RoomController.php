@@ -18,8 +18,8 @@ class RoomController extends Controller
         foreach ($meetingtimes as $t) {
             $day = carbon::parse($meetingtimes[$i]->start_date)->format('Y-m-d');
             if ($day === $date) {
-                $data[] = carbon::parse($meetingtimes[$i]->start_date)->format('H:i:s');
-                $data[] = carbon::parse($meetingtimes[$i]->end_date)->format('H:i:s');
+                $interval = carbon::parse($meetingtimes[$i]->start_date)->format('H:i:s')."-".carbon::parse($meetingtimes[$i]->end_date)->format('H:i:s');
+                $data[] = $interval;
             }
             $i += 1;
         }
