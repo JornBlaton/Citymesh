@@ -12,7 +12,6 @@ class Meeting extends Model
     public $timestamps = false;
     use HasFactory;
     protected $guarded=['id'];
-    use HasFactory;
     protected $fillable = [
         'room_id',
         'booked_for',
