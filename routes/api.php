@@ -21,4 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/meetings', [MeetingController::class, 'index']);
+Route::post('/meetings', [MeetingController::class, 'createMeeting']);
+
 Route::get('/meetingtimes', [RoomController::class, 'checkRoomAvailability']);
