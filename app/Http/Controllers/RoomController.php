@@ -16,6 +16,39 @@ class RoomController extends Controller
     }
 
     function checkRoomSizes(Request $request) {
+        $rooms = Room::select("id", "name")->Where("capacity", '>=', $request->amount)->get();
+        $roomids = array();
+        $j = 0;
+        foreach ($rooms as $r) {
+            $temp = (object) [
+                'id' => $rooms[$j]->id,
+                'name' => $rooms[$j]->name,
+            ];
+            $roomids[] = $temp;
+            $j += 1;
+        }
+
+        return $roomids;
+    }
+    
+    function helpFunction(Request $request) {
+        $rooms = Room::select("id", "name")->Where("capacity", '>=', $request->amount)->get();
+        $roomids = array();
+        $j = 0;
+        foreach ($rooms as $r) {
+            $temp = (object) [
+                'id' => $rooms[$j]->id,
+                'name' => $rooms[$j]->name,
+            ];
+            $roomids[] = $temp;
+            $j += 1;
+        }
+
+        return $roomids;
+    }
+
+
+    function checkRoomAvailability(MeetingCheckRequest $request){
         $rooms = Room::select("id")->Where("capacity", '>=', $request->amount)->get();
         $roomids = array();
         $j = 0;
@@ -24,12 +57,6 @@ class RoomController extends Controller
             $j += 1;
         }
 
-        return $roomids;
-    }
-
-    function checkRoomAvailability(MeetingCheckRequest $request){
-        $roomids = checkRoomSizes();
-
         $meetingtimes = Meeting::select("id", "start_date", "end_date", "room_id")->whereIn('room_id', $roomids)->get();
         $data = array();
         $i = 0;
@@ -37,13 +64,13 @@ class RoomController extends Controller
         foreach ($meetingtimes as $t) {
             $day = carbon::parse($meetingtimes[$i]->start_date)->format('Y-m-d');
             if ($day === $request->date/*"2025-01-01"*/) {
-                $test = (object) [
+                $temp = (object) [
                     'id' => $meetingtimes[$i]->id,
                     'room' => $meetingtimes[$i]->room_id,
                     'timestamp_start' => carbon::parse($meetingtimes[$i]->start_date)->format('H:i'),
                     'timestamp_end' => carbon::parse($meetingtimes[$i]->end_date)->format('H:i'),
                 ];
-                $data[] = $test;
+                $data[] = $temp;
             }
             $i += 1;
         }
