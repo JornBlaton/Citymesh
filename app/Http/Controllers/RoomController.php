@@ -57,7 +57,7 @@ class RoomController extends Controller
             $j += 1;
         }
 
-        $meetingtimes = Meeting::select("id", "start_date", "end_date", "room_id")->whereIn('room_id', $roomids)->get();
+        $meetingtimes = Meeting::select("id", "booked_for", "start_date", "end_date", "room_id")->with('room')->whereIn('room_id', $roomids)->get();
         $data = array();
         $i = 0;
         $data[] = (object) [ "selected_date" => $request->date];
@@ -66,7 +66,9 @@ class RoomController extends Controller
             if ($day === $request->date/*"2025-01-01"*/) {
                 $temp = (object) [
                     'id' => $meetingtimes[$i]->id,
+                    'person' => $meetingtimes[$i]->booked_for,
                     'room' => $meetingtimes[$i]->room_id,
+                    'room_name' => $meetingtimes[$i]->room->name,
                     'timestamp_start' => carbon::parse($meetingtimes[$i]->start_date)->format('H:i'),
                     'timestamp_end' => carbon::parse($meetingtimes[$i]->end_date)->format('H:i'),
                 ];
