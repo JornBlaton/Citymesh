@@ -60,7 +60,7 @@ class RoomController extends Controller
         $meetingtimes = Meeting::select("id", "start_date", "end_date", "room_id")->whereIn('room_id', $roomids)->get();
         $data = array();
         $i = 0;
-        
+        $data[] = (object) [ "selected_date" => $request->date];
         foreach ($meetingtimes as $t) {
             $day = carbon::parse($meetingtimes[$i]->start_date)->format('Y-m-d');
             if ($day === $request->date/*"2025-01-01"*/) {
