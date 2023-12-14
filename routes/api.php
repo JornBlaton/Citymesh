@@ -24,3 +24,4 @@ Route::get('/meetings', [MeetingController::class, 'index']);
 Route::post('/meetings', [MeetingController::class, 'createMeeting']);
 
 Route::get('/meetingtimes', [RoomController::class, 'checkRoomAvailability']);
+Route::get('/rooms', [RoomController::class, 'index']);
