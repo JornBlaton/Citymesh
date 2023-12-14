@@ -15,7 +15,7 @@ class RoomController extends Controller
         return response()->json($rooms);
     }
 
-    function checkRoomAvailability(MeetingCheckRequest $request){
+    function checkRoomSizes(Request $request) {
         $rooms = Room::select("id")->Where("capacity", '>=', $request->amount)->get();
         $roomids = array();
         $j = 0;
@@ -23,6 +23,12 @@ class RoomController extends Controller
             $roomids[] = $rooms[$j]->id;
             $j += 1;
         }
+
+        return $roomids;
+    }
+
+    function checkRoomAvailability(MeetingCheckRequest $request){
+        $roomids = checkRoomSizes();
 
         $meetingtimes = Meeting::select("id", "start_date", "end_date", "room_id")->whereIn('room_id', $roomids)->get();
         $data = array();
@@ -34,8 +40,8 @@ class RoomController extends Controller
                 $test = (object) [
                     'id' => $meetingtimes[$i]->id,
                     'room' => $meetingtimes[$i]->room_id,
-                    'timestamp_start' => carbon::parse($meetingtimes[$i]->start_date)->format('H:i:s'),
-                    'timestamp_end' => carbon::parse($meetingtimes[$i]->end_date)->format('H:i:s'),
+                    'timestamp_start' => carbon::parse($meetingtimes[$i]->start_date)->format('H:i'),
+                    'timestamp_end' => carbon::parse($meetingtimes[$i]->end_date)->format('H:i'),
                 ];
                 $data[] = $test;
             }
